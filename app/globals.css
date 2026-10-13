@@ -75,6 +75,10 @@
   .lifecycle-sweep { animation: sweep 2.4s ease-in-out infinite; transform: translateX(-120%); }
   @keyframes sweep { 0% { transform: translateX(-120%); } 60%, 100% { transform: translateX(320%); } }
 
+  /* Lifecycle panel cards drift gently while a step is shown */
+  .lifecycle-float { animation: lifecycle-float 6s ease-in-out infinite; }
+  @keyframes lifecycle-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+
   /* Riskube capability chips light up in sequence */
   .riskube-chip-box { fill: var(--color-night-2); stroke: var(--color-night-line); stroke-width: 1; }
   .riskube-chip .riskube-chip-box { animation: chip 3.85s ease-in-out infinite; animation-delay: inherit; }
