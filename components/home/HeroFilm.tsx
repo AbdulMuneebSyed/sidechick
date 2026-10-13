@@ -27,11 +27,11 @@ const STEPS = site.lifecycle.steps;
 const [, COLLECTIONS, RECOVERY] = site.why.pillars;
 
 const SHOTS = [
-  { chapter: 0, ms: 2200, tint: "#faf9f7" },
-  { chapter: 1, ms: 3600, tint: "#f2f0fe" },
-  { chapter: 2, ms: 3600, tint: "#fff7f1" },
-  { chapter: 3, ms: 3200, tint: "#e8f2ed" },
-  { chapter: 3, ms: 3600, tint: "#fdf0f1" },
+  { chapter: 0, ms: 1800, tint: "#faf9f7" },
+  { chapter: 1, ms: 2800, tint: "#f2f0fe" },
+  { chapter: 2, ms: 2800, tint: "#fff7f1" },
+  { chapter: 3, ms: 2500, tint: "#e8f2ed" },
+  { chapter: 3, ms: 2800, tint: "#fdf0f1" },
 ];
 const CHAPTERS = [site.brand.name.text, ...STEPS.map((s) => s.name.text)];
 const CHAPTER_MS = CHAPTERS.map((_, c) => SHOTS.filter((s) => s.chapter === c).reduce((a, s) => a + s.ms, 0));
@@ -79,13 +79,13 @@ const layer: Variants = {
     y: 0,
     scale: 1,
     visibility: "visible",
-    transition: { type: "spring", stiffness: 130, damping: 22, delay: 0.2 + k * 0.12 },
+    transition: { type: "spring", stiffness: 190, damping: 24, delay: 0.1 + k * 0.08 },
   }),
 };
 const line: Variants = {
   before: { opacity: 0, y: 16, transition: { duration: 0.25 }, transitionEnd: { visibility: "hidden" } },
   after: { opacity: 0, y: -12, transition: { duration: 0.3 }, transitionEnd: { visibility: "hidden" } },
-  on: (k: number) => ({ opacity: 1, y: 0, visibility: "visible", transition: { duration: 0.6, ease, delay: 0.15 + k * 0.07 } }),
+  on: (k: number) => ({ opacity: 1, y: 0, visibility: "visible", transition: { duration: 0.45, ease, delay: 0.08 + k * 0.05 } }),
 };
 
 const shadow = "shadow-[0_18px_40px_-18px_rgba(17,17,19,.35),0_2px_6px_-2px_rgba(17,17,19,.08)]";
