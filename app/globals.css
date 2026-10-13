@@ -31,7 +31,7 @@
   --text-display: clamp(2.6rem, 6.2vw, 4.75rem);
   --text-display--line-height: 1.02;
   --text-display--letter-spacing: -0.035em;
-  --text-h2: clamp(2rem, 4vw, 3.25rem);
+  --text-h2: clamp(1.75rem, 4vw, 3.25rem);
   --text-h2--line-height: 1.06;
   --text-h2--letter-spacing: -0.03em;
 

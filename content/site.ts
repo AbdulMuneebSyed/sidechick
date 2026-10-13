@@ -49,7 +49,7 @@ export const site = {
           "Proactively mitigate risk with continuous portfolio surveillance, real-time diagnostics on performance drops, risk forecasting, and early warning signals.",
           "S1",
         ),
-        figure: c("10-15%", "S1"),
+        figure: c("10–15%", "S1"),
         result: c("reduction in Portfolio loss rates.", "S1"),
       },
       {
@@ -69,7 +69,7 @@ export const site = {
           "Turn write-offs into revenue with NPV-driven settlement optimization, recovery yield maximization, and an AI-powered marketplace for distressed debt trading.",
           "S1",
         ),
-        figure: c("25-30%", "S1"),
+        figure: c("25–30%", "S1"),
         result: c("increase in Recovery yield.", "S1"),
       },
     ],
