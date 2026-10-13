@@ -26,13 +26,16 @@ import { ui } from "@/content/ui";
 const STEPS = site.lifecycle.steps;
 const [, COLLECTIONS, RECOVERY] = site.why.pillars;
 
+// Each shot: an unhurried ~0.8s transition in, then a 1s hold before the next one starts.
+const TRANSITION_MS = 800;
+const HOLD_MS = 1000;
 const SHOTS = [
-  { chapter: 0, ms: 1400, tint: "#faf9f7" },
-  { chapter: 1, ms: 2200, tint: "#f2f0fe" },
-  { chapter: 2, ms: 2200, tint: "#fff7f1" },
-  { chapter: 3, ms: 2000, tint: "#e8f2ed" },
-  { chapter: 3, ms: 2200, tint: "#fdf0f1" },
-];
+  { chapter: 0, tint: "#faf9f7" },
+  { chapter: 1, tint: "#f2f0fe" },
+  { chapter: 2, tint: "#fff7f1" },
+  { chapter: 3, tint: "#e8f2ed" },
+  { chapter: 3, tint: "#fdf0f1" },
+].map((s) => ({ ...s, ms: TRANSITION_MS + HOLD_MS }));
 const CHAPTERS = [site.brand.name.text, ...STEPS.map((s) => s.name.text)];
 const CHAPTER_MS = CHAPTERS.map((_, c) => SHOTS.filter((s) => s.chapter === c).reduce((a, s) => a + s.ms, 0));
 const SHOT_OFFSET = SHOTS.map((s, i) => SHOTS.slice(0, i).filter((p) => p.chapter === s.chapter).reduce((a, p) => a + p.ms, 0));
@@ -72,20 +75,20 @@ const phaseOf = (i: number, active: number): Phase => (i === active ? "on" : i <
 
 const ease = [0.22, 1, 0.36, 1] as const;
 const layer: Variants = {
-  before: { opacity: 0, y: 40, scale: 0.97, transition: { duration: 0.25 }, transitionEnd: { visibility: "hidden" } },
-  after: { opacity: 0, y: -28, transition: { duration: 0.28, ease }, transitionEnd: { visibility: "hidden" } },
+  before: { opacity: 0, y: 40, scale: 0.97, transition: { duration: 0.45, ease }, transitionEnd: { visibility: "hidden" } },
+  after: { opacity: 0, y: -28, transition: { duration: 0.5, ease }, transitionEnd: { visibility: "hidden" } },
   on: (k: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
     visibility: "visible",
-    transition: { type: "spring", stiffness: 240, damping: 26, delay: 0.06 + k * 0.06 },
+    transition: { type: "spring", stiffness: 110, damping: 20, delay: 0.05 + k * 0.08 },
   }),
 };
 const line: Variants = {
-  before: { opacity: 0, y: 16, transition: { duration: 0.18 }, transitionEnd: { visibility: "hidden" } },
-  after: { opacity: 0, y: -12, transition: { duration: 0.2 }, transitionEnd: { visibility: "hidden" } },
-  on: (k: number) => ({ opacity: 1, y: 0, visibility: "visible", transition: { duration: 0.35, ease, delay: 0.05 + k * 0.04 } }),
+  before: { opacity: 0, y: 16, transition: { duration: 0.35, ease }, transitionEnd: { visibility: "hidden" } },
+  after: { opacity: 0, y: -12, transition: { duration: 0.4, ease }, transitionEnd: { visibility: "hidden" } },
+  on: (k: number) => ({ opacity: 1, y: 0, visibility: "visible", transition: { duration: 0.6, ease, delay: 0.1 + k * 0.06 } }),
 };
 
 const shadow = "shadow-[0_18px_40px_-18px_rgba(17,17,19,.35),0_2px_6px_-2px_rgba(17,17,19,.08)]";
@@ -149,7 +152,7 @@ export function HeroFilm() {
             style={{ backgroundColor: s.tint }}
             initial={false}
             animate={{ opacity: i === shot ? 1 : 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
           />
         ))}
         <div aria-hidden className="dot-field absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_80%_70%_at_50%_45%,black,transparent)]" />
@@ -162,8 +165,8 @@ export function HeroFilm() {
             initial={false}
             animate={shot === 0 ? "on" : "off"}
             variants={{
-              on: { opacity: 1, scale: 1, visibility: "visible", transition: { duration: 0.55, ease } },
-              off: { opacity: 0, scale: 1.35, transition: { duration: 0.5, ease: [0.65, 0, 0.35, 1] }, transitionEnd: { visibility: "hidden" } },
+              on: { opacity: 1, scale: 1, visibility: "visible", transition: { duration: 0.8, ease } },
+              off: { opacity: 0, scale: 1.35, transition: { duration: 0.75, ease: [0.65, 0, 0.35, 1] }, transitionEnd: { visibility: "hidden" } },
             }}
           >
             <Image
