@@ -27,11 +27,11 @@ const STEPS = site.lifecycle.steps;
 const [, COLLECTIONS, RECOVERY] = site.why.pillars;
 
 const SHOTS = [
-  { chapter: 0, ms: 3400, tint: "#faf9f7" },
-  { chapter: 1, ms: 5400, tint: "#f2f0fe" },
-  { chapter: 2, ms: 5400, tint: "#fff7f1" },
-  { chapter: 3, ms: 4800, tint: "#e8f2ed" },
-  { chapter: 3, ms: 5200, tint: "#fdf0f1" },
+  { chapter: 0, ms: 2200, tint: "#faf9f7" },
+  { chapter: 1, ms: 3600, tint: "#f2f0fe" },
+  { chapter: 2, ms: 3600, tint: "#fff7f1" },
+  { chapter: 3, ms: 3200, tint: "#e8f2ed" },
+  { chapter: 3, ms: 3600, tint: "#fdf0f1" },
 ];
 const CHAPTERS = [site.brand.name.text, ...STEPS.map((s) => s.name.text)];
 const CHAPTER_MS = CHAPTERS.map((_, c) => SHOTS.filter((s) => s.chapter === c).reduce((a, s) => a + s.ms, 0));
@@ -101,7 +101,8 @@ const subscribeVisibility = (cb: () => void) => {
 export function HeroFilm() {
   const root = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion() ?? false;
-  const inView = useInView(root, { amount: 0.3 });
+  // Wait until the visitor has scrolled the film well into view; its top edge already peeks in on load.
+  const inView = useInView(root, { amount: 0.65 });
   const tabVisible = useSyncExternalStore(subscribeVisibility, () => !document.hidden, () => true);
   const [shot, setShot] = useState(0);
   const [paused, setPaused] = useState(false);
