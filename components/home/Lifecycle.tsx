@@ -106,6 +106,7 @@ export function Lifecycle() {
                   width={815}
                   height={1798}
                   sizes="(min-width: 1024px) 560px, 100vw"
+                  loading="eager"
                   className="absolute inset-x-0 top-0 h-auto w-full"
                   style={{
                     opacity: i === active ? 1 : 0,

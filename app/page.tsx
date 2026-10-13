@@ -1,6 +1,7 @@
 import { Hero } from "@/components/home/Hero";
 import { Lifecycle } from "@/components/home/Lifecycle";
 import { Pillars } from "@/components/home/Pillars";
+import { PlatformBand } from "@/components/home/PlatformBand";
 import { ProofStrip } from "@/components/home/ProofStrip";
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
       <ProofStrip />
       <Pillars />
       <Lifecycle />
+      <PlatformBand />
     </>
   );
 }

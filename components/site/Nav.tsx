@@ -62,7 +62,7 @@ export function Nav() {
       ref={navRef}
       className={`sticky top-0 z-50 transition-[background,box-shadow,border-color] duration-300 ${
         scrolled || menu || mobileOpen
-          ? "border-b border-line bg-paper/85 backdrop-blur-xl"
+          ? "border-b border-line bg-paper/95 backdrop-blur-xl"
           : "border-b border-transparent bg-paper/0"
       }`}
     >

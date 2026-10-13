@@ -68,5 +68,12 @@
   .lifecycle-sweep { animation: sweep 2.4s ease-in-out infinite; transform: translateX(-120%); }
   @keyframes sweep { 0% { transform: translateX(-120%); } 60%, 100% { transform: translateX(320%); } }
 
+  /* Riskube capability chips light up in sequence */
+  .riskube-chip-box { fill: var(--color-night-2); stroke: var(--color-night-line); stroke-width: 1; }
+  .riskube-chip .riskube-chip-box { animation: chip 3.85s ease-in-out infinite; animation-delay: inherit; }
+  @keyframes chip { 0%, 18% { stroke: var(--color-night-line); fill: var(--color-night-2); } 28%, 48% { stroke: var(--color-brand); fill: #2a1418; } 70%, 100% { stroke: var(--color-night-line); fill: var(--color-night-2); } }
+  .riskube-chip-m { animation: chipm 3.85s ease-in-out infinite; }
+  @keyframes chipm { 0%, 18%, 70%, 100% { border-color: rgb(255 255 255 / .1); } 28%, 48% { border-color: var(--color-brand); } }
+
   .brand-gradient { background-image: linear-gradient(90deg, var(--color-brand), var(--color-brand-deep)); }
 }
