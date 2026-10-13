@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { useMotionValueEvent, useScroll } from "motion/react";
+import { m, useMotionValueEvent, useScroll } from "motion/react";
 import { site } from "@/content/site";
 import { useMediaQuery } from "@/components/ui/useMediaQuery";
+import { Reveal } from "@/components/ui/Reveal";
 import { LoopRing } from "./LoopRing";
 
 const SCREENS = [
@@ -45,14 +46,21 @@ export function Lifecycle() {
   };
 
   const step = lifecycle.steps[active];
+  // Animate the label/actions only when the step changes, so the first render is plain visible HTML.
+  const [shown, setShown] = useState(active);
+  const [changed, setChanged] = useState(false);
+  if (active !== shown) {
+    setShown(active);
+    setChanged(true);
+  }
 
   return (
     <section id="lifecycle" className="relative border-t border-line bg-wash">
       <div className="container-x pt-24 md:pt-32">
-        <div className="max-w-3xl">
+        <Reveal className="max-w-3xl">
           <p className="eyebrow">{lifecycle.engine.text}</p>
           <h2 className="mt-4 text-h2 font-semibold">{lifecycle.engineNote.text}</h2>
-        </div>
+        </Reveal>
 
         {/* Lifecycle bar: Origination → Portfolio → Collections → Recoveries */}
         <ol className="mt-10 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="Lending lifecycle">
@@ -80,17 +88,30 @@ export function Lifecycle() {
             <div className="grid gap-8">
               <LoopRing active={active} onSelect={select} />
               <div className="mx-auto w-full max-w-md" aria-live="polite">
-                <p className="font-mono text-xs uppercase tracking-[0.08em] text-brand-ink">{step.label.text}</p>
-                <ul className="mt-4 grid gap-2.5">
-                  {step.actions.map((a) => (
-                    <li key={a.text} className="flex items-center gap-3 rounded-xl border border-line bg-paper px-4 py-3 text-[15px] font-medium">
+                <m.p
+                  key={step.id}
+                  initial={changed ? { opacity: 0, y: 6 } : false}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="font-mono text-xs uppercase tracking-[0.08em] text-brand-ink"
+                >
+                  {step.label.text}
+                </m.p>
+                <ul key={`${step.id}-actions`} className="mt-4 grid gap-2.5">
+                  {step.actions.map((a, k) => (
+                    <m.li
+                      key={a.text}
+                      initial={changed ? { opacity: 0, y: 10 } : false}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1], delay: 0.08 + k * 0.06 }}
+                      className="flex items-center gap-3 rounded-xl border border-line bg-paper px-4 py-3 text-[15px] font-medium">
                       <span aria-hidden className="grid size-6 shrink-0 place-items-center rounded-full bg-brand-wash text-brand-ink">
                         <svg viewBox="0 0 16 16" className="size-3.5" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M3.5 8.5 6.5 11.5 12.5 5" strokeLinecap="round" strokeLinejoin="round" />
                         </svg>
                       </span>
                       {a.text}
-                    </li>
+                    </m.li>
                   ))}
                 </ul>
               </div>

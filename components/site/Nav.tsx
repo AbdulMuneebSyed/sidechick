@@ -19,6 +19,10 @@ const platformLinks = [
 
 const solutionLinks = site.segments.items.map((s) => ({ href: `/#${s.id}`, title: s.label.text }));
 
+// Menus stay mounted and fade/slide with CSS; `invisible` keeps a closed menu out of the tab order.
+const reveal = (open: boolean) =>
+  `transition-[opacity,transform,visibility] duration-200 ease-out ${open ? "visible opacity-100 translate-y-0" : "invisible pointer-events-none -translate-y-2 opacity-0"}`;
+
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg viewBox="0 0 12 12" aria-hidden className={`size-3 transition-transform ${open ? "rotate-180" : ""}`} fill="none" stroke="currentColor" strokeWidth="1.6">
@@ -116,8 +120,7 @@ export function Nav() {
       {/* Desktop dropdowns */}
       <div
         id="menu-platform"
-        hidden={menu !== "platform"}
-        className="absolute inset-x-0 top-full hidden border-b border-line bg-paper/95 backdrop-blur-xl md:block"
+        className={`absolute inset-x-0 top-full hidden border-b border-line bg-paper/95 backdrop-blur-xl md:block ${reveal(menu === "platform")}`}
       >
         <div className="container-x grid grid-cols-4 gap-2 py-6">
           {platformLinks.map((l) => (
@@ -130,8 +133,7 @@ export function Nav() {
       </div>
       <div
         id="menu-solutions"
-        hidden={menu !== "solutions"}
-        className="absolute inset-x-0 top-full hidden border-b border-line bg-paper/95 backdrop-blur-xl md:block"
+        className={`absolute inset-x-0 top-full hidden border-b border-line bg-paper/95 backdrop-blur-xl md:block ${reveal(menu === "solutions")}`}
       >
         <div className="container-x grid grid-cols-5 gap-2 py-6">
           {solutionLinks.map((l) => (
@@ -143,7 +145,7 @@ export function Nav() {
       </div>
 
       {/* Mobile sheet */}
-      <div hidden={!mobileOpen} className="h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper md:hidden">
+      <div className={`absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto border-t border-line bg-paper md:hidden ${reveal(mobileOpen)}`}>
         <div className="container-x grid gap-8 py-8">
           <div>
             <p className="eyebrow mb-3">{site.nav.platformMenu.text}</p>

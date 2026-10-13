@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState, useSyncExternalStore } from "react";
+import { AnimatePresence, m } from "motion/react";
 import { site } from "@/content/site";
 import { Reveal } from "@/components/ui/Reveal";
 import { useMediaQuery } from "@/components/ui/useMediaQuery";
@@ -89,10 +90,17 @@ export function Segments() {
         >
           <SegmentVideo name={VIDEOS[active]} />
           <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-wash via-wash/85 to-wash/20" />
-          <div key={item.id} className="animate-[fadeUp_.5s_ease-out]">
-            <p className="font-mono text-xs uppercase tracking-[0.08em] text-brand-ink">{item.label.text}</p>
-            <p className="mt-4 text-xl leading-relaxed text-ink md:text-2xl md:leading-[1.45]">{item.body.text}</p>
-          </div>
+          <AnimatePresence mode="wait" initial={false}>
+            <m.div
+              key={item.id}
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } }}
+              exit={{ opacity: 0, y: -8, transition: { duration: 0.18 } }}
+            >
+              <p className="font-mono text-xs uppercase tracking-[0.08em] text-brand-ink">{item.label.text}</p>
+              <p className="mt-4 text-xl leading-relaxed text-ink md:text-2xl md:leading-[1.45]">{item.body.text}</p>
+            </m.div>
+          </AnimatePresence>
         </div>
       </div>
     </section>

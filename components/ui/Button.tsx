@@ -18,7 +18,7 @@ type Props = { variant?: Variant; size?: "sm" | "md"; children: ReactNode; class
 
 export function Button({ variant = "primary", size = "md", className = "", children, ...rest }: Props) {
   const cls = [
-    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition duration-200 active:scale-[.98]",
+    "group/btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition duration-200 active:scale-[.98]",
     size === "sm" ? "h-9 px-4 text-sm" : "h-11 px-5 text-[15px]",
     styles[variant],
     className,
@@ -40,7 +40,7 @@ export function Button({ variant = "primary", size = "md", className = "", child
 
 export function Arrow({ className = "" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 16 16" aria-hidden className={`size-4 ${className}`} fill="none" stroke="currentColor" strokeWidth="1.6">
+    <svg viewBox="0 0 16 16" aria-hidden className={`size-4 transition-transform duration-200 group-hover/btn:translate-x-0.5 ${className}`} fill="none" stroke="currentColor" strokeWidth="1.6">
       <path d="M3 8h10M9 4l4 4-4 4" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );

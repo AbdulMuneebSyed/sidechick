@@ -83,4 +83,24 @@
   @keyframes chipm { 0%, 18%, 70%, 100% { border-color: rgb(255 255 255 / .1); } 28%, 48% { border-color: var(--color-brand); } }
 
   .brand-gradient { background-image: linear-gradient(90deg, var(--color-brand), var(--color-brand-deep)); }
+
+  /* Hero entrance, CSS-only so it runs before hydration */
+  .rise { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } }
+  .line-rise { display: block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; }
+  .line-rise > span { display: block; animation: line-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both; }
+  @keyframes line-rise { from { transform: translateY(105%); } }
+
+  /* Hero film. Layers are placed in % of a 400×520 (narrow) or 1200×720 (wide)
+     canvas, so the server-rendered frame is laid out before any JS runs. */
+  .film { container: film / inline-size; }
+  .film-canvas { aspect-ratio: 400 / 520; }
+  .film-layer { position: absolute; left: var(--tx); top: var(--ty); width: var(--tw); display: var(--td, block); }
+  .film-wide { display: none; }
+  @container film (min-width: 40rem) {
+    .film-canvas { aspect-ratio: 1200 / 720; }
+    .film-layer { left: var(--wx); top: var(--wy); width: var(--ww); display: block; }
+    .film-wide { display: block; }
+    .film-narrow { display: none; }
+  }
 }

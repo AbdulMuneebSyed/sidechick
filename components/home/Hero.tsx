@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { site } from "@/content/site";
 import { Arrow, Button } from "@/components/ui/Button";
+import { LineRise, Rise } from "@/components/ui/Rise";
 import { HeroStage } from "./HeroStage";
 
 // Icons for Secure / Scalable / World-Class, from indilabs.ai (image 74/75/76).
@@ -24,37 +25,41 @@ export function Hero() {
 
       <div className="container-x relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
-          <ul className="mb-7 inline-flex items-center gap-1 rounded-full border border-line bg-paper/80 p-1 pr-1.5 text-[13px] text-ink-2 shadow-sm backdrop-blur">
-            {hero.badges.map((b, i) => (
-              <li key={b.text} className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 odd:bg-transparent">
-                <Image src={BADGE_ICONS[i]} alt="" width={16} height={16} className="size-4 opacity-80" />
-                {b.text}
-              </li>
-            ))}
-          </ul>
+          <Rise>
+            <ul className="mb-7 inline-flex items-center gap-1 rounded-full border border-line bg-paper/80 p-1 pr-1.5 text-[13px] text-ink-2 shadow-sm backdrop-blur">
+              {hero.badges.map((b, i) => (
+                <li key={b.text} className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 odd:bg-transparent">
+                  <Image src={BADGE_ICONS[i]} alt="" width={16} height={16} className="size-4 opacity-80" />
+                  {b.text}
+                </li>
+              ))}
+            </ul>
+          </Rise>
 
           <h1 className="text-display font-semibold text-ink">
-            <span className="block">{lineOne}</span>
-            <span className="block">
+            <LineRise delay={80}>{lineOne}</LineRise>
+            <LineRise delay={180}>
               <span className="whitespace-nowrap bg-gradient-to-r from-brand to-brand-deep bg-clip-text text-transparent">{highlight}</span> {tail}
-            </span>
+            </LineRise>
           </h1>
 
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">{hero.subtitle.text}</p>
+          <Rise delay={320}>
+            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">{hero.subtitle.text}</p>
+          </Rise>
 
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
+          <Rise delay={420} className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Button href="#why" variant="secondary">
               {hero.secondaryCta.text}
             </Button>
             <Button href="/demo">
               {hero.primaryCta.text} <Arrow />
             </Button>
-          </div>
+          </Rise>
         </div>
 
-        <div className="mt-16 md:mt-20">
+        <Rise delay={560} className="mt-16 md:mt-20">
           <HeroStage />
-        </div>
+        </Rise>
       </div>
     </section>
   );

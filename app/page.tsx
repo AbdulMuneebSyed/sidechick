@@ -7,10 +7,11 @@ import { Pillars } from "@/components/home/Pillars";
 import { PlatformBand } from "@/components/home/PlatformBand";
 import { ProofStrip } from "@/components/home/ProofStrip";
 import { Segments } from "@/components/home/Segments";
+import { MotionProvider } from "@/components/ui/MotionProvider";
 
 export default function Home() {
   return (
-    <>
+    <MotionProvider>
       <Hero />
       <ProofStrip />
       <Pillars />
@@ -20,6 +21,6 @@ export default function Home() {
       <Marquee />
       <BeforeAfter />
       <ClosingCta />
-    </>
+    </MotionProvider>
   );
 }

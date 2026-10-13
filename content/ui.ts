@@ -7,4 +7,6 @@ export const ui = {
   sending: "Sending…",
   failed: "Your message couldn’t be sent. Please email us instead:",
   optional: "optional",
+  pause: "Pause",
+  play: "Play",
 } as const;

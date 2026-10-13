@@ -1,12 +1,27 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 /**
- * Fades content up as it scrolls into view. Server HTML is fully visible;
+ * Fades content in as it scrolls into view. Server HTML is fully visible;
  * only elements that start below the fold are hidden, and only once JS runs.
+ * Plain CSS transitions on transform + opacity, so it costs no animation library.
  */
-export function Reveal({ children, delay = 0, className = "" }: { children: ReactNode; delay?: number; className?: string }) {
+export function Reveal({
+  children,
+  delay = 0,
+  x = 0,
+  y = 24,
+  className = "",
+}: {
+  children: ReactNode;
+  /** ms */
+  delay?: number;
+  /** px offset to travel from */
+  x?: number;
+  y?: number;
+  className?: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<"idle" | "hidden" | "shown">("idle");
 
@@ -28,13 +43,16 @@ export function Reveal({ children, delay = 0, className = "" }: { children: Reac
     return () => io.disconnect();
   }, []);
 
+  const style: CSSProperties = {
+    transform: state === "hidden" ? `translate3d(${x}px, ${y}px, 0)` : undefined,
+    transitionDelay: state === "shown" ? `${delay}ms` : undefined,
+  };
+
   return (
     <div
       ref={ref}
-      className={`${className} transition-[opacity,transform] duration-700 ease-[cubic-bezier(.2,.7,.2,1)] ${
-        state === "hidden" ? "translate-y-6 opacity-0" : "translate-y-0 opacity-100"
-      }`}
-      style={{ transitionDelay: state === "shown" ? `${delay}ms` : undefined }}
+      className={`${className} transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${state === "hidden" ? "opacity-0" : "opacity-100"}`}
+      style={style}
     >
       {children}
     </div>

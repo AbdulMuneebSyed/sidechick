@@ -61,9 +61,11 @@ export function BeforeAfter() {
                     <span aria-hidden className="mt-1.5 size-3 shrink-0 rounded-full border-[1.5px] border-faint" />
                     <span>{before.text}</span>
                   </div>
-                  <div className="flex items-start gap-3 bg-night px-6 py-4 text-[15px] text-white md:border-t-0 md:px-8">
-                    <Check />
-                    {after.text}
+                  <div className="bg-night px-6 py-4 text-[15px] text-white md:border-t-0 md:px-8">
+                    <Reveal delay={150 + i * 70} x={-14} y={0} className="flex items-start gap-3">
+                      <Check />
+                      {after.text}
+                    </Reveal>
                   </div>
                 </li>
               ))}

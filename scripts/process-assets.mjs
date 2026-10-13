@@ -29,6 +29,17 @@ for (let i = 0; i < 3; i++) {
     .extract({ left: x0 + i * Math.round(meta.width * 0.3285), top, width: colW, height: meta.height - top - bottom })
     .webp({ quality: 88 }).toFile(`${M}/${names[i]}.webp`);
 }
+// Hero film: each column's three cards (KPI tile, two charts) cut out at native size so they
+// can move as separate layers. Bounds measured on the white card padding of each column.
+const CARDS = [[89, 317], [345, 1049], [1078, 1782]];
+for (let i = 0; i < 3; i++) {
+  for (let j = 0; j < 3; j++) {
+    const [y0, y1] = CARDS[j];
+    await sharp("sources/extracted/frame-440-1.png")
+      .extract({ left: x0 + i * Math.round(meta.width * 0.3285) + 62, top: top + y0, width: 685, height: y1 - y0 })
+      .webp({ quality: 90 }).toFile(`${M}/film/${names[i].replace("step-", "")}-${j + 1}.webp`);
+  }
+}
 await sharp("sources/extracted/frame-440-2.png").webp({ quality: 88 }).toFile(`${M}/product-treatments.webp`);
 await sharp("sources/extracted/frame-440-3.png").webp({ quality: 88 }).toFile(`${M}/product-recovery.webp`);
 await sharp("sources/extracted/herosectionimg1.png").webp({ quality: 85 }).toFile(`${M}/lifecycle-loop.webp`);
