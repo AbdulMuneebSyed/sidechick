@@ -75,23 +75,12 @@
   .lifecycle-sweep { animation: sweep 2.4s ease-in-out infinite; transform: translateX(-120%); }
   @keyframes sweep { 0% { transform: translateX(-120%); } 60%, 100% { transform: translateX(320%); } }
 
-  /* Lifecycle panel cards drift gently while a step is shown */
-  .lifecycle-float { animation: lifecycle-float 6s ease-in-out infinite; }
-  @keyframes lifecycle-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
-
-  /* Riskube beam diagram: one 4s cycle. Input comets reach the hub at ~40%, the hub ring pulses,
-     then output comets fan out (each delayed by --d) and light their capability on arrival. */
-  .beam-track { fill: none; stroke: rgb(255 255 255 / 0.1); stroke-width: 1.2; }
-  .beam-comet { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 0.18 1; stroke-dashoffset: 0.18; animation: beam-comet 4s cubic-bezier(0.45, 0, 0.55, 1) var(--d, 0s) infinite; }
-  @keyframes beam-comet { 0% { stroke-dashoffset: 0.18; } 40%, 100% { stroke-dashoffset: -1; } }
-  .beam-hub-ring { opacity: 0; animation: beam-ring 4s ease-out 0.05s infinite; }
-  @keyframes beam-ring { 0%, 36% { opacity: 0; transform: scale(0.94); } 42% { opacity: 1; transform: scale(1); } 75%, 100% { opacity: 0; transform: scale(1.12); } }
-  .beam-cap { animation: beam-cap 4s ease-in-out var(--d, 0s) infinite; }
-  .beam-cap-dot { animation: beam-cap-dot 4s ease-in-out var(--d, 0s) infinite; }
-  @keyframes beam-cap { 0%, 36%, 85%, 100% { border-color: rgb(255 255 255 / 0.1); background-color: rgb(255 255 255 / 0.04); } 42%, 62% { border-color: rgb(232 72 85 / 0.55); background-color: rgb(232 72 85 / 0.12); } }
-  @keyframes beam-cap-dot { 0%, 36%, 85%, 100% { background-color: rgb(255 255 255 / 0.3); } 42%, 62% { background-color: #ff8c95; } }
-  .beam-vcomet { transform: translateY(-100%); animation: beam-v 4s cubic-bezier(0.45, 0, 0.55, 1) var(--d, 0s) infinite; }
-  @keyframes beam-v { 0% { transform: translateY(-100%); } 40%, 100% { transform: translateY(200%); } }
+  /* Riskube capability chips light up in sequence */
+  .riskube-chip-box { fill: var(--color-night-2); stroke: var(--color-night-line); stroke-width: 1; }
+  .riskube-chip .riskube-chip-box { animation: chip 3.85s ease-in-out infinite; animation-delay: inherit; }
+  @keyframes chip { 0%, 18% { stroke: var(--color-night-line); fill: var(--color-night-2); } 28%, 48% { stroke: var(--color-brand); fill: #2a1418; } 70%, 100% { stroke: var(--color-night-line); fill: var(--color-night-2); } }
+  .riskube-chip-m { animation: chipm 3.85s ease-in-out infinite; }
+  @keyframes chipm { 0%, 18%, 70%, 100% { border-color: rgb(255 255 255 / .1); } 28%, 48% { border-color: var(--color-brand); } }
 
   .brand-gradient { background-image: linear-gradient(90deg, var(--color-brand), var(--color-brand-deep)); }
 

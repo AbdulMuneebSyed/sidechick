@@ -18,7 +18,7 @@ Requires Node 20.9 or newer.
 
 | Route | What it is |
 | --- | --- |
-| `/` | Home: hero film, results, pillars, lifecycle tabs, Riskube Engine, customer types, before/after, call to action |
+| `/` | Home: hero film, results, pillars, lifecycle stepper, Riskube Engine, customer types, before/after, call to action |
 | `/about` | About Indilabs |
 | `/demo` | Book a Demo form |
 | `/demo/thanks`, `/demo/unsent` | Where the form lands when JavaScript is off |
@@ -70,8 +70,7 @@ All imagery and video comes from indilabs.ai. `scripts/extract-assets.py` downlo
 - **Dark-text logo** for light backgrounds: the original white wordmark, recoloured.
 - **Hero film**: a ~9-second looping sequence (overview → Monitor → Optimize → Execute → results) built from the original 3-step dashboard. Each of its nine cards (KPI tile and two charts per step) is cut out at native resolution (`public/media/film/`) and moves as its own layer, so nothing is ever enlarged past its source pixels. Captions are the step labels, actions and published results already on indilabs.ai.
 - **Step crops**: the Monitor, Optimize and Execute columns cut from that same dashboard.
-- **Lifecycle tabs**: Monitor / Optimize / Execute panels built from each step's three dashboard cards (the same native-size crops as the film).
-- **Riskube Engine diagram**: the original "Platform Capabilities" diagram redrawn as an animated-beam flow (data → engine hub → seven capabilities) with real HTML text.
+- **Animated lifecycle loop and Riskube diagram**: drawn in code from the original diagrams.
 - **Customer type videos**: the five videos shipped with indilabs.ai but never shown, re-encoded for the web.
 - **Favicon and share image**: built from the logo mark, headline and dashboard.
 
@@ -82,7 +81,7 @@ Animations stay light enough for low-end phones:
 - Only `transform` and `opacity` are animated (no animated blur, shadows or layout).
 - The hero entrance is plain CSS, so it plays with the first paint instead of waiting for JavaScript.
 - Scroll reveals and the nav menus are CSS transitions, with no animation library on the About and Demo pages.
-- [Motion](https://motion.dev) is loaded only on the home page, for the film, the lifecycle tabs, the word-by-word "Why" statement and the customer-type panel. The Riskube diagram animates with CSS only. Its animation engine is fetched after first render.
+- [Motion](https://motion.dev) is loaded only on the home page, for the film, the stepper and the customer-type panel. Its animation engine is fetched after first render.
 - The film starts once it's scrolled into view, pauses when it's scrolled away or the tab is hidden, and has a pause button.
 - With the system "reduce motion" setting on, movement is replaced by simple fades and the film doesn't auto-play.
 
