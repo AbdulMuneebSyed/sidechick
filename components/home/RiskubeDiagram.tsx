@@ -1,179 +1,174 @@
+import Image from "next/image";
+import type { CSSProperties } from "react";
 import { site } from "@/content/site";
 
 /**
- * The "Platform Capabilities" diagram from indilabs.ai (Capability-Tablet.svg),
- * redrawn as live SVG with real, selectable text:
- * Multiple Data Types → Automated Pipelines → Riskube Engine → Architecture → 7 capabilities.
- * Pulses travel along the paths and each capability lights up in turn.
+ * Riskube Engine as an animated-beam diagram (the Vercel / Stripe / Attio
+ * "Universal Context" pattern): data travels along curved beams from
+ * Multiple Data Types into a glowing engine hub, then fans out to the seven
+ * capabilities, each lighting up as its beam arrives. All text is HTML; the
+ * beams are one SVG. One 4s CSS cycle drives everything, so it costs no JS.
  */
 const P = site.platform;
-const ROWS = P.capabilities.map((c, i) => ({ label: c.text, y: 48 + i * 62 }));
-const TRUNK_X = 770;
-const CHIP_X = 812;
-const MID_Y = 234;
-// "Riskube Engine" → wordmark "Ris" + red "kube", with "Engine" beneath, as in the original.
-const [NAME, SUFFIX] = P.engine.text.split(" ");
+const [NAME] = P.engine.text.split(" "); // "Riskube"
 
-function DbIcon({ x, y, color = "currentColor" }: { x: number; y: number; color?: string }) {
+// Desktop canvas: 1200×560. Hub centre (600, 280); capabilities stacked on the right.
+const W = 1200;
+const H = 560;
+const HUB = { x: 600, y: 280, r: 84 };
+const SRC_RIGHT = 262;
+const CAP_X = 872;
+const CAP_Y = P.capabilities.map((_, i) => 64 + i * 72);
+const IN_Y = [236, 280, 324];
+
+const inPath = (y: number) => `M ${SRC_RIGHT} ${y} C ${SRC_RIGHT + 130} ${y}, ${HUB.x - HUB.r - 120} ${HUB.y}, ${HUB.x - HUB.r} ${HUB.y}`;
+const outPath = (y: number) => `M ${HUB.x + HUB.r} ${HUB.y} C ${HUB.x + HUB.r + 110} ${HUB.y}, ${CAP_X - 120} ${y}, ${CAP_X} ${y}`;
+
+const pct = (v: number, of: number) => `${(v / of) * 100}%`;
+const delay = (s: number) => ({ "--d": `${s}s` }) as CSSProperties;
+
+function DbIcon({ className = "" }: { className?: string }) {
   return (
-    <g transform={`translate(${x} ${y})`} fill="none" stroke={color} strokeWidth="1.4">
-      <rect x="0" y="0" width="14" height="14" rx="2" />
-      <path d="M0 4.7h14M0 9.3h14" />
-      <circle cx="3" cy="2.4" r=".6" fill={color} />
-      <circle cx="3" cy="7" r=".6" fill={color} />
-      <circle cx="3" cy="11.6" r=".6" fill={color} />
-    </g>
+    <svg viewBox="0 0 14 14" aria-hidden className={className} fill="none" stroke="currentColor" strokeWidth="1.3">
+      <rect x=".65" y=".65" width="12.7" height="12.7" rx="2" />
+      <path d="M.65 5h12.7M.65 9.2h12.7" />
+    </svg>
   );
 }
 
-function Cube({ cx, cy, s = 1, stroke = "cubeStroke" }: { cx: number; cy: number; s?: number; stroke?: string }) {
-  // Isometric cube, open front like the original illustration.
-  const w = 92 * s, h = 52 * s, d = 92 * s;
-  const top = `M ${cx} ${cy - h} L ${cx + w} ${cy - h / 2 - 2} L ${cx} ${cy} L ${cx - w} ${cy - h / 2 - 2} Z`;
+function Hub({ className = "" }: { className?: string }) {
   return (
-    <g>
-      <path d={top} fill="rgba(232,72,85,.10)" stroke={`url(#${stroke})`} strokeWidth="2" strokeLinejoin="round" />
-      <path d={`M ${cx - w} ${cy - h / 2 + 6} L ${cx - 6} ${cy + 8} L ${cx - 6} ${cy + d} L ${cx - w} ${cy + d - h / 2 - 6} Z`} fill="rgba(255,255,255,.02)" stroke={`url(#${stroke})`} strokeWidth="2" strokeLinejoin="round" />
-      <path d={`M ${cx + w} ${cy - h / 2 + 6} L ${cx + 6} ${cy + 8} L ${cx + 6} ${cy + d} L ${cx + w} ${cy + d - h / 2 - 6} Z`} fill="rgba(255,255,255,.02)" stroke={`url(#${stroke})`} strokeWidth="2" strokeLinejoin="round" />
-      <text x={cx} y={cy - h / 2 + 2} textAnchor="middle" className="fill-white text-[19px] font-semibold">
-        {NAME.slice(0, 3)}
-        <tspan className="fill-brand">{NAME.slice(3)}</tspan>
-      </text>
-      <text x={cx} y={cy - h / 2 + 18} textAnchor="middle" className="fill-brand text-[10px] italic">
-        {SUFFIX}
-      </text>
-      <text transform={`translate(${cx - w / 2 - 14} ${cy - h + 4}) rotate(-20)`} textAnchor="middle" className="fill-white/70 text-[13px] italic">
-        {P.engineTraits[0].text}
-      </text>
-      <text transform={`translate(${cx + w / 2 + 16} ${cy - h + 4}) rotate(20)`} textAnchor="middle" className="fill-white/70 text-[13px] italic">
-        {P.engineTraits[1].text}
-      </text>
-    </g>
+    <div className={`beam-hub relative grid place-items-center rounded-[28px] ${className}`}>
+      <span aria-hidden className="beam-hub-ring absolute -inset-3 rounded-[34px] border border-brand/40" />
+      <div className="relative grid size-full place-items-center rounded-[28px] border border-white/15 bg-[linear-gradient(160deg,#2a1519,#15151b_60%)] shadow-[0_0_60px_-10px_rgba(232,72,85,.55),inset_0_1px_0_rgba(255,255,255,.08)]">
+        <div className="grid justify-items-center gap-2 text-center">
+          <Image src="/media/logo-mark.png" alt="" width={40} height={40} className="size-9 md:size-10" />
+          <p className="text-lg font-semibold leading-none text-white md:text-xl">
+            {NAME.slice(0, 3)}
+            <span className="text-brand">{NAME.slice(3)}</span>
+          </p>
+          <p className="text-[11px] italic leading-none text-white/55">{P.engine.text.slice(NAME.length + 1)}</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export function RiskubeDiagram() {
-  const branch = (y: number) => `M ${TRUNK_X} ${MID_Y} L ${TRUNK_X} ${y} L ${CHIP_X} ${y}`;
   return (
-    <>
-      {/* Desktop: horizontal flow */}
-      <div className="hidden overflow-x-auto md:block">
-        <svg viewBox="0 0 1100 470" className="w-full min-w-[760px]" role="img" aria-labelledby="riskube-title riskube-desc">
-          <title id="riskube-title">{P.engine.text}</title>
-          <desc id="riskube-desc">
-            {`${P.input.text} flow through ${P.pipelines.text} into the ${P.engine.text}, whose ${P.architecture.text} powers: ${P.capabilities.map((c) => c.text).join(", ")}.`}
-          </desc>
+    <figure aria-label={`${P.input.text} → ${P.pipelines.text} → ${P.engine.text} → ${P.architecture.text}`}>
+      {/* Desktop: horizontal beams */}
+      <div className="relative hidden lg:block" style={{ aspectRatio: `${W} / ${H}` }}>
+        <svg viewBox={`0 0 ${W} ${H}`} preserveAspectRatio="none" aria-hidden className="absolute inset-0 size-full overflow-visible">
           <defs>
-            <linearGradient id="cubeStroke" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0" stopColor="#e84855" />
-              <stop offset="1" stopColor="#7b6cf6" />
+            <linearGradient id="beam-in" gradientUnits="userSpaceOnUse" x1={SRC_RIGHT} x2={HUB.x - HUB.r} y1="0" y2="0">
+              <stop offset="0" stopColor="#ff8c95" stopOpacity="0" />
+              <stop offset="1" stopColor="#ff8c95" />
             </linearGradient>
-            <linearGradient id="flow" x1="0" x2="1">
-              <stop offset="0" stopColor="#e84855" />
-              <stop offset="1" stopColor="#ac2631" />
+            <linearGradient id="beam-out" gradientUnits="userSpaceOnUse" x1={HUB.x + HUB.r} x2={CAP_X} y1="0" y2="0">
+              <stop offset="0" stopColor="#a99ffb" stopOpacity="0" />
+              <stop offset="1" stopColor="#ff8c95" />
             </linearGradient>
           </defs>
-
-          {/* Input box */}
-          <g>
-            <rect x="10" y={MID_Y - 46} width="210" height="92" rx="12" fill="rgba(232,72,85,.08)" stroke="rgba(232,72,85,.55)" />
-            <g className="text-white/80">
-              <DbIcon x={30} y={MID_Y - 28} />
-            </g>
-            <text x="30" y={MID_Y + 24} className="fill-white text-[17px] font-medium">
-              {P.input.text}
-            </text>
-          </g>
-
-          {/* Automated Pipelines */}
-          <path id="pipe" d={`M 232 ${MID_Y} L 410 ${MID_Y}`} stroke="url(#flow)" strokeWidth="3" />
-          <path d={`M 400 ${MID_Y - 7} L 412 ${MID_Y} L 400 ${MID_Y + 7}`} fill="none" stroke="#ac2631" strokeWidth="3" />
-          <text x="321" y={MID_Y - 16} textAnchor="middle" className="fill-white/75 text-[14px] italic">
-            {P.pipelines.text}
-          </text>
-
-          <Cube cx={520} cy={MID_Y - 20} />
-
-          {/* Architecture */}
-          <path d={`M 630 ${MID_Y} L ${TRUNK_X} ${MID_Y}`} stroke="#7b6cf6" strokeWidth="3" />
-          <text x="700" y={MID_Y - 16} textAnchor="middle" className="fill-white/75 text-[14px] italic">
-            {P.architecture.text}
-          </text>
-
-          {/* Trunk + branches */}
-          <path d={`M ${TRUNK_X} ${ROWS[0].y} L ${TRUNK_X} ${ROWS.at(-1)!.y}`} stroke="#4b45a8" strokeWidth="2.5" />
-          {ROWS.map((r, i) => (
-            <g key={r.label}>
-              <path d={branch(r.y)} fill="none" stroke="#4b45a8" strokeWidth="2.5" />
-              <g className="riskube-chip" style={{ animationDelay: `${i * 0.55}s` }}>
-                <rect x={CHIP_X} y={r.y - 20} width="270" height="40" rx="9" className="riskube-chip-box" />
-                <g className="text-white/70">
-                  <DbIcon x={CHIP_X + 14} y={r.y - 7} />
-                </g>
-                <text x={CHIP_X + 42} y={r.y + 5} className="fill-white text-[15px]">
-                  {r.label}
-                </text>
-              </g>
-              <circle r="3.5" fill="#ff8c95" className="motion-reduce:hidden">
-                <animateMotion dur="3.85s" begin={`${i * 0.55}s`} repeatCount="indefinite" keyPoints="0;1;1" keyTimes="0;0.25;1" calcMode="linear" path={branch(r.y)} />
-              </circle>
-            </g>
+          {IN_Y.map((y) => (
+            <path key={`ib${y}`} d={inPath(y)} className="beam-track" vectorEffect="non-scaling-stroke" />
           ))}
-
-          {/* Pulses into the engine */}
-          {[0, 1.2, 2.4].map((b) => (
-            <circle key={b} r="4" fill="#ff8c95" className="motion-reduce:hidden">
-              <animateMotion dur="3.6s" begin={`${b}s`} repeatCount="indefinite" path={`M 232 ${MID_Y} L 410 ${MID_Y}`} />
-            </circle>
+          {CAP_Y.map((y) => (
+            <path key={`ob${y}`} d={outPath(y)} className="beam-track" vectorEffect="non-scaling-stroke" />
           ))}
-          {[0.6, 1.8, 3].map((b) => (
-            <circle key={b} r="4" fill="#a99ffb" className="motion-reduce:hidden">
-              <animateMotion dur="3.6s" begin={`${b}s`} repeatCount="indefinite" path={`M 630 ${MID_Y} L ${TRUNK_X} ${MID_Y}`} />
-            </circle>
+          {IN_Y.map((y, i) => (
+            <path key={`ic${y}`} d={inPath(y)} pathLength={1} stroke="url(#beam-in)" className="beam-comet" style={delay(i * 0.12)} vectorEffect="non-scaling-stroke" />
+          ))}
+          {CAP_Y.map((y, i) => (
+            <path key={`oc${y}`} d={outPath(y)} pathLength={1} stroke="url(#beam-out)" className="beam-comet" style={delay(1.4 + i * 0.2)} vectorEffect="non-scaling-stroke" />
           ))}
         </svg>
-      </div>
 
-      {/* Mobile: vertical flow */}
-      <div className="grid justify-items-center gap-3 md:hidden">
-        <div className="flex w-full items-center gap-3 rounded-xl border border-brand/50 bg-brand/10 px-4 py-4 text-white">
-          <svg viewBox="0 0 14 14" className="size-4 text-white/80" aria-hidden>
-            <DbIcon x={0} y={0} />
-          </svg>
-          <span className="font-medium">{P.input.text}</span>
+        {/* Source */}
+        <div className="absolute -translate-y-1/2" style={{ left: 0, top: "50%", width: pct(SRC_RIGHT, W) }}>
+          <div className="rounded-2xl border border-white/12 bg-white/[.04] p-5 backdrop-blur-sm">
+            <div className="flex gap-1.5 text-white/70">
+              <DbIcon className="size-4" />
+              <DbIcon className="size-4 opacity-70" />
+              <DbIcon className="size-4 opacity-40" />
+            </div>
+            <p className="mt-4 text-lg font-medium leading-snug text-white">{P.input.text}</p>
+          </div>
         </div>
-        <FlowLabel>{P.pipelines.text}</FlowLabel>
-        <svg viewBox="410 125 220 195" className="w-48" aria-label={P.engine.text}>
-          <defs>
-            <linearGradient id="cubeStrokeM" x1="0" x2="1" y1="0" y2="1">
-              <stop offset="0" stopColor="#e84855" />
-              <stop offset="1" stopColor="#7b6cf6" />
-            </linearGradient>
-          </defs>
-          <Cube cx={520} cy={200} stroke="cubeStrokeM" />
-        </svg>
-        <FlowLabel>{P.architecture.text}</FlowLabel>
-        <ul className="grid w-full gap-2">
+        <p className="absolute -translate-x-1/2 text-sm italic text-white/60" style={{ left: pct(SRC_RIGHT + (HUB.x - HUB.r - SRC_RIGHT) / 2, W), top: pct(IN_Y[0] - 46, H) }}>
+          {P.pipelines.text}
+        </p>
+
+        {/* Engine hub with its two traits */}
+        <div className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: pct(HUB.x, W), top: pct(HUB.y, H), width: pct(HUB.r * 2, W), aspectRatio: "1" }}>
+          <Hub className="size-full" />
+          <ul className="absolute inset-x-[-40%] -top-12 flex justify-center gap-2">
+            {P.engineTraits.map((t) => (
+              <li key={t.text} className="rounded-full border border-white/12 bg-white/[.05] px-3 py-1 text-xs text-white/75">
+                {t.text}
+              </li>
+            ))}
+          </ul>
+        </div>
+        <p className="absolute -translate-x-1/2 text-sm italic text-white/60" style={{ left: pct(HUB.x + HUB.r + 90, W), top: pct(HUB.y - 40, H) }}>
+          {P.architecture.text}
+        </p>
+
+        {/* Capabilities */}
+        <ul>
           {P.capabilities.map((c, i) => (
-            <li key={c.text} className="riskube-chip-m flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.04] px-4 py-3 text-[15px] text-white" style={{ animationDelay: `${i * 0.55}s` }}>
-              <svg viewBox="0 0 14 14" className="size-3.5 text-white/60" aria-hidden>
-                <DbIcon x={0} y={0} />
-              </svg>
+            <li
+              key={c.text}
+              className="beam-cap absolute flex -translate-y-1/2 items-center gap-3 rounded-xl border border-white/10 bg-white/[.04] px-4 py-2.5 text-[15px] text-white/85"
+              style={{ left: pct(CAP_X, W), top: pct(CAP_Y[i], H), width: pct(W - CAP_X, W), ...delay(1.4 + i * 0.2) }}
+            >
+              <span aria-hidden className="beam-cap-dot size-1.5 shrink-0 rounded-full bg-white/30" />
               {c.text}
             </li>
           ))}
         </ul>
       </div>
-    </>
+
+      {/* Mobile / tablet: vertical flow */}
+      <div className="mx-auto grid max-w-md justify-items-center lg:hidden">
+        <div className="w-full rounded-2xl border border-white/12 bg-white/[.04] p-5">
+          <div className="flex gap-1.5 text-white/70">
+            <DbIcon className="size-4" />
+            <DbIcon className="size-4 opacity-70" />
+            <DbIcon className="size-4 opacity-40" />
+          </div>
+          <p className="mt-3 text-lg font-medium text-white">{P.input.text}</p>
+        </div>
+        <VBeam label={P.pipelines.text} />
+        <ul className="mb-4 flex gap-2">
+          {P.engineTraits.map((t) => (
+            <li key={t.text} className="rounded-full border border-white/12 bg-white/[.05] px-3 py-1 text-xs text-white/75">
+              {t.text}
+            </li>
+          ))}
+        </ul>
+        <Hub className="size-40" />
+        <VBeam label={P.architecture.text} late />
+        <ul className="grid w-full gap-2">
+          {P.capabilities.map((c, i) => (
+            <li key={c.text} className="beam-cap flex items-center gap-3 rounded-xl border border-white/10 bg-white/[.04] px-4 py-3 text-[15px] text-white/85" style={delay(1.4 + i * 0.2)}>
+              <span aria-hidden className="beam-cap-dot size-1.5 shrink-0 rounded-full bg-white/30" />
+              {c.text}
+            </li>
+          ))}
+        </ul>
+      </div>
+    </figure>
   );
 }
 
-function FlowLabel({ children }: { children: React.ReactNode }) {
+function VBeam({ label, late = false }: { label: string; late?: boolean }) {
   return (
-    <div className="flex flex-col items-center gap-1 text-sm italic text-white/70">
-      <span className="h-5 w-0.5 bg-gradient-to-b from-brand to-brand-deep" />
-      {children}
-      <span className="h-5 w-0.5 bg-gradient-to-b from-brand-deep to-[#7b6cf6]" />
+    <div className="relative flex h-20 w-full items-center justify-center">
+      <span aria-hidden className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 overflow-hidden bg-white/12">
+        <span className="beam-vcomet absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-transparent to-[#ff8c95]" style={delay(late ? 1.5 : 0)} />
+      </span>
+      <span className="relative rounded-full bg-night px-2 text-sm italic text-white/60">{label}</span>
     </div>
   );
 }
