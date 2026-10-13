@@ -18,6 +18,9 @@ export const site = {
     about: c("About", "S1"),
     platform: c("Platform Capabilities", "S1"),
     demo: c("Book a Demo", "S1"),
+    // Short menu labels; both words appear in the original copy.
+    platformMenu: c("Platform", "S1"),
+    solutionsMenu: c("Solutions", "S2"),
   },
 
   hero: {

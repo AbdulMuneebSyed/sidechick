@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Original indilabs.ai files kept for reference only.
+    "sources/**",
   ]),
 ]);
 

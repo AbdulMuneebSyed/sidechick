@@ -14,7 +14,7 @@ const assets = [
 
 export default function Home() {
   return (
-    <main className="container-x grid gap-10 py-16">
+    <div className="container-x grid gap-10 py-16">
       <p className="eyebrow">Asset check</p>
       {assets.map((a) => (
         <figure key={a} className="grid gap-2">
@@ -22,6 +22,6 @@ export default function Home() {
           <figcaption className="font-mono text-sm text-muted">{a}</figcaption>
         </figure>
       ))}
-    </main>
+    </div>
   );
 }
