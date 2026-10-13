@@ -2,6 +2,7 @@ import Image from "next/image";
 import { site } from "@/content/site";
 import { Arrow, Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { ScrollWords } from "@/components/ui/ScrollWords";
 
 // Each pillar shows the matching Indilabs product screen, on the tint that step uses in the dashboard.
 const VISUALS: Record<string, { src: string; w: number; h: number; tint: string; alt: string; fit: string }> = {
@@ -12,19 +13,18 @@ const VISUALS: Record<string, { src: string; w: number; h: number; tint: string;
 
 export function Pillars() {
   const { why } = site;
-  // Statement heading, Attio-style: first clause in ink, the rest muted.
-  const [lead, ...restParts] = why.description.text.split(" by ");
-  const rest = `by ${restParts.join(" by ")}`;
+  // Statement heading, Attio-style: fills in word by word on scroll; the first clause ends in ink, the rest muted.
+  const leadWords = why.description.text.split(" by ")[0].split(" ").length;
 
   return (
     <section id="why" className="scroll-mt-20 py-24 md:py-32">
       <div className="container-x">
-        <Reveal className="max-w-4xl">
-          <p className="eyebrow">{why.eyebrow.text}</p>
-          <h2 className="mt-4 text-h2 font-semibold">
-            {lead} <span className="text-faint">{rest}</span>
-          </h2>
-        </Reveal>
+        <div className="max-w-4xl">
+          <Reveal>
+            <p className="eyebrow">{why.eyebrow.text}</p>
+          </Reveal>
+          <ScrollWords text={why.description.text} emphasis={leadWords} className="mt-4 text-h2 font-semibold" />
+        </div>
 
         <div className="mt-14 grid gap-5 md:grid-cols-3">
           {why.pillars.map((p, i) => {
