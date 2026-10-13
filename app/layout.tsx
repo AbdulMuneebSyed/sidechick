@@ -16,7 +16,18 @@ export const metadata: Metadata = {
   description: site.hero.subtitle.text,
   openGraph: { title, description: site.hero.subtitle.text, siteName: site.brand.name.text, type: "website" },
   twitter: { card: "summary_large_image", title, description: site.hero.subtitle.text },
-  icons: { icon: "/media/logo-mark.png" },
+};
+
+const organization = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: site.brand.name.text,
+  url: "https://indilabs.ai",
+  logo: "https://indilabs.ai/media/logo-light.png",
+  email: site.brand.email.text,
+  telephone: site.brand.phone.text,
+  description: site.about.title.text,
+  sameAs: ["https://www.linkedin.com/company/indilabs-ai/"],
 };
 
 export const viewport: Viewport = { themeColor: "#ffffff" };
@@ -33,6 +44,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <Footer />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organization).replace(/</g, "\\u003c") }}
+        />
       </body>
     </html>
   );
