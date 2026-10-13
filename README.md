@@ -68,7 +68,7 @@ For the owners to approve or reword:
 All imagery and video comes from indilabs.ai. `scripts/extract-assets.py` downloads it and `scripts/process-assets.mjs` produces what's in `public/media/`. Derived pieces, approved in advance:
 
 - **Dark-text logo** for light backgrounds: the original white wordmark, recoloured.
-- **Hero film**: a ~13-second looping sequence (overview → Monitor → Optimize → Execute → results) built from the original 3-step dashboard. Each of its nine cards (KPI tile and two charts per step) is cut out at native resolution (`public/media/film/`) and moves as its own layer, so nothing is ever enlarged past its source pixels. Captions are the step labels, actions and published results already on indilabs.ai.
+- **Hero film**: a ~10-second looping sequence (overview → Monitor → Optimize → Execute → results) built from the original 3-step dashboard. Each of its nine cards (KPI tile and two charts per step) is cut out at native resolution (`public/media/film/`) and moves as its own layer, so nothing is ever enlarged past its source pixels. Captions are the step labels, actions and published results already on indilabs.ai.
 - **Step crops**: the Monitor, Optimize and Execute columns cut from that same dashboard.
 - **Animated lifecycle loop and Riskube diagram**: drawn in code from the original diagrams.
 - **Customer type videos**: the five videos shipped with indilabs.ai but never shown, re-encoded for the web.
