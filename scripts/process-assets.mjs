@@ -42,6 +42,5 @@ for (let i = 0; i < 3; i++) {
 }
 await sharp("sources/extracted/frame-440-2.png").webp({ quality: 88 }).toFile(`${M}/product-treatments.webp`);
 await sharp("sources/extracted/frame-440-3.png").webp({ quality: 88 }).toFile(`${M}/product-recovery.webp`);
-await sharp("sources/extracted/herosectionimg1.png").webp({ quality: 85 }).toFile(`${M}/lifecycle-loop.webp`);
 for (const n of ["image-74", "image-75", "image-76"]) await sharp(`sources/extracted/${n}.png`).resize(96).png().toFile(`${M}/icon-${n}.png`);
 console.log("done", meta.width, meta.height);
