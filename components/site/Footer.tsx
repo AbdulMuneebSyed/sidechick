@@ -6,7 +6,7 @@ const LINKEDIN = "https://www.linkedin.com/company/indilabs-ai/";
 
 export function Footer() {
   return (
-    <footer className="border-t border-line bg-wash">
+    <footer className="overflow-hidden bg-wash">
       <div className="container-x grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <div className="grid content-start gap-4">
           <Logo className="h-7 w-auto" />
@@ -41,9 +41,16 @@ export function Footer() {
           </FooterLink>
         </FooterCol>
       </div>
-      <div className="border-t border-line">
-        <p className="container-x py-6 text-sm text-faint">
+      <div className="container-x">
+        <p className="text-sm text-faint">
           © 2024 {site.brand.name.text}. {site.footer.rights.text}
+        </p>
+        {/* The name returns at full width to close the page */}
+        <p
+          aria-hidden
+          className="wordmark-in mt-6 select-none whitespace-nowrap text-[min(15.5vw,13.5rem)] font-semibold leading-[0.8] tracking-[-0.06em] text-ink"
+        >
+          {site.brand.name.text}
         </p>
       </div>
     </footer>
@@ -53,8 +60,8 @@ export function Footer() {
 function FooterCol({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="eyebrow mb-4 !text-faint">{title}</p>
-      <ul className="grid gap-2.5 text-[15px]">{children}</ul>
+      <p className="mb-4 text-sm font-medium text-faint">{title}</p>
+      <ul className="grid gap-2.5 text-base">{children}</ul>
     </div>
   );
 }
@@ -64,7 +71,7 @@ function FooterLink({ href, children, external }: { href: string; children: Reac
     <li>
       <Link
         href={href}
-        className="text-ink-2 transition hover:text-brand-ink"
+        className="text-ink-2 underline decoration-transparent underline-offset-4 transition-colors duration-200 hover:text-brand-ink hover:decoration-current"
         {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       >
         {children}

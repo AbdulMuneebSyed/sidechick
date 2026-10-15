@@ -4,9 +4,8 @@ import type { ComponentProps, ReactNode } from "react";
 type Variant = "primary" | "secondary" | "ghost" | "light";
 
 const styles: Record<Variant, string> = {
-  primary:
-    "brand-gradient text-white shadow-[0_1px_0_rgba(255,255,255,.25)_inset,0_6px_16px_-6px_rgba(172,38,49,.55)] hover:brightness-110",
-  secondary: "bg-paper text-ink border border-line hover:border-ink/25 hover:bg-wash",
+  primary: "bg-brand-ink text-white hover:bg-brand-deep",
+  secondary: "bg-sunk text-ink hover:bg-line",
   ghost: "text-ink hover:bg-sunk",
   light: "bg-white text-ink hover:bg-white/90",
 };
@@ -18,7 +17,7 @@ type Props = { variant?: Variant; size?: "sm" | "md"; children: ReactNode; class
 
 export function Button({ variant = "primary", size = "md", className = "", children, ...rest }: Props) {
   const cls = [
-    "group/btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition duration-200 active:scale-[.98]",
+    "group/btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition-[transform,background-color,color] duration-200 ease-[var(--ease-out)] active:scale-[.97] active:duration-100",
     size === "sm" ? "h-9 px-4 text-sm" : "h-11 px-5 text-[15px]",
     styles[variant],
     className,

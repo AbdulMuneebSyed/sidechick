@@ -1,28 +1,38 @@
 "use client";
 
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ElementType, type ReactNode } from "react";
+
+type Variant = "rise" | "settle" | "shutter" | "stagger" | "none";
 
 /**
- * Fades content in as it scrolls into view. Server HTML is fully visible;
+ * Reveals content as it scrolls into view. Server HTML is fully visible;
  * only elements that start below the fold are hidden, and only once JS runs.
- * Plain CSS transitions on transform + opacity, so it costs no animation library.
+ * The look of each variant lives in globals.css ([data-reveal]), on transform,
+ * opacity and clip-path only. "none" only sets data-state, for children that
+ * choreograph themselves (.draw-x, .strike, .rk-draw …).
  */
 export function Reveal({
   children,
+  as: Tag = "div",
+  variant = "rise",
   delay = 0,
   x = 0,
   y = 24,
   className = "",
+  style,
 }: {
   children: ReactNode;
+  as?: ElementType;
+  variant?: Variant;
   /** ms */
   delay?: number;
-  /** px offset to travel from */
+  /** px offset to travel from (rise only) */
   x?: number;
   y?: number;
   className?: string;
+  style?: CSSProperties;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
   const [state, setState] = useState<"idle" | "hidden" | "shown">("idle");
 
   useEffect(() => {
@@ -43,18 +53,15 @@ export function Reveal({
     return () => io.disconnect();
   }, []);
 
-  const style: CSSProperties = {
-    transform: state === "hidden" ? `translate3d(${x}px, ${y}px, 0)` : undefined,
-    transitionDelay: state === "shown" ? `${delay}ms` : undefined,
-  };
-
   return (
-    <div
+    <Tag
       ref={ref}
-      className={`${className} transition-[opacity,transform] duration-700 ease-[cubic-bezier(.22,1,.36,1)] ${state === "hidden" ? "opacity-0" : "opacity-100"}`}
-      style={style}
+      data-reveal={variant}
+      data-state={state}
+      className={className}
+      style={{ "--d": `${delay}ms`, "--rx": `${x}px`, "--ry": `${y}px`, ...style } as CSSProperties}
     >
       {children}
-    </div>
+    </Tag>
   );
 }

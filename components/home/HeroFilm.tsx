@@ -138,7 +138,7 @@ export function HeroFilm() {
   const jump = (c: number) => setShot(SHOTS.findIndex((s) => s.chapter === c));
 
   return (
-    <div ref={root} className="film">
+    <div ref={root} data-ui className="film">
       <div
         role="img"
         aria-label="Indilabs.ai dashboard: Step 1 Monitoring & Diagnostics, Step 2 Strategy Optimisation, Step 3 Execution"
@@ -155,7 +155,6 @@ export function HeroFilm() {
             transition={{ duration: 0.8, ease: "easeInOut" }}
           />
         ))}
-        <div aria-hidden className="dot-field absolute inset-0 opacity-60 [mask-image:radial-gradient(ellipse_80%_70%_at_50%_45%,black,transparent)]" />
 
         <div aria-hidden className="absolute inset-0 @max-[40rem]:[mask-image:linear-gradient(to_bottom,black_88%,transparent)]">
           {/* Overview: the full dashboard, zooming toward the next step's column as it leaves */}
@@ -237,7 +236,7 @@ function StepShot({ index, phase, ms }: { index: number; phase: Phase; ms: numbe
       </m.div>
 
       <div className={captionBox}>
-        <m.p custom={0} variants={line} initial={false} animate={phase} className="inline-flex rounded-full bg-paper px-2.5 py-1 font-mono text-[10px] tracking-wide text-ink-2 ring-1 ring-ink/10 @min-[40rem]:text-[clamp(10px,1.05cqw,13px)]">
+        <m.p custom={0} variants={line} initial={false} animate={phase} className="inline-flex rounded-full bg-paper px-2.5 py-1 text-[11px] font-medium text-ink-2 ring-1 ring-ink/10 @min-[40rem]:text-[clamp(10px,1.05cqw,13px)]">
           {step.label.text}
         </m.p>
         <m.p custom={1} variants={line} initial={false} animate={phase} className="mt-2 text-[9cqw] font-semibold leading-none tracking-[-0.035em] text-ink @min-[40rem]:mt-4 @min-[40rem]:text-[5.2cqw]">
@@ -268,7 +267,7 @@ function ResultsShot({ phase }: { phase: Phase }) {
       <div className={`${captionBox} grid grid-cols-2 gap-4 @min-[40rem]:grid-cols-1 @min-[40rem]:gap-[2.4cqw]`}>
         {[COLLECTIONS, RECOVERY].map((p, k) => (
           <m.div key={p.id} custom={k * 2} variants={line} initial={false} animate={phase}>
-            <p className="film-wide font-mono text-[clamp(10px,1cqw,12px)] uppercase tracking-[0.08em] text-muted">{p.title.text}</p>
+            <p className="film-wide text-[clamp(12px,1.2cqw,14px)] font-medium text-ink-2">{p.title.text}</p>
             <p className="text-[8cqw] font-semibold leading-none tracking-[-0.04em] text-brand-ink @min-[40rem]:mt-[0.8cqw] @min-[40rem]:text-[4.4cqw]">{p.figure.text}</p>
             <p className="mt-1 text-[3.2cqw] leading-snug text-ink-2 @min-[40rem]:mt-[0.6cqw] @min-[40rem]:text-[clamp(12px,1.35cqw,16px)]">{p.result.text}</p>
           </m.div>

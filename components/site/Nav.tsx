@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/content/site";
 import { Button } from "@/components/ui/Button";
@@ -31,11 +32,41 @@ function Chevron({ open }: { open: boolean }) {
   );
 }
 
+// Which menu the section under the nav belongs to, so the bar shows where you are on the home page.
+const SECTION_MENU: Record<string, Exclude<MenuId, null>> = { why: "platform", lifecycle: "platform", platform: "platform", segments: "solutions" };
+
+function useCurrentSection() {
+  const pathname = usePathname();
+  const [current, setCurrent] = useState<{ path: string; menu: MenuId }>({ path: "", menu: null });
+  useEffect(() => {
+    const els = Object.keys(SECTION_MENU)
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    if (!els.length) return;
+    const visible = new Set<string>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) visible.add(e.target.id);
+          else visible.delete(e.target.id);
+        }
+        const id = els.find((el) => visible.has(el.id))?.id;
+        setCurrent({ path: pathname, menu: id ? SECTION_MENU[id] : null });
+      },
+      { rootMargin: "-45% 0px -50% 0px" },
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [pathname]);
+  return current.path === pathname ? current.menu : null;
+}
+
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [menu, setMenu] = useState<MenuId>(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
+  const section = useCurrentSection();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -64,16 +95,16 @@ export function Nav() {
   return (
     <header
       ref={navRef}
-      className={`sticky top-0 z-50 transition-[background,box-shadow,border-color] duration-300 ${
+      className={`sticky top-0 z-50 transition-[background-color,box-shadow] duration-300 ${
         scrolled || menu || mobileOpen
-          ? "border-b border-line bg-paper/95 backdrop-blur-xl"
-          : "border-b border-transparent bg-paper/0"
+          ? "bg-paper shadow-[0_1px_0_var(--color-line)]"
+          : "bg-paper/0"
       }`}
     >
       <nav className="container-x flex h-16 items-center gap-8" aria-label="Main">
         <Logo className="h-6 w-auto md:h-7" />
 
-        <ul className="hidden items-center gap-1 text-[15px] text-ink-2 md:flex">
+        <ul className="hidden items-center gap-1 text-base text-ink-2 md:flex">
           {(
             [
               ["platform", site.nav.platformMenu.text],
@@ -86,9 +117,13 @@ export function Nav() {
                 aria-expanded={menu === id}
                 aria-controls={`menu-${id}`}
                 onClick={() => setMenu(menu === id ? null : id)}
-                className="inline-flex h-9 items-center gap-1.5 rounded-full px-3 hover:bg-sunk hover:text-ink"
+                className={`relative inline-flex h-9 items-center gap-1.5 rounded-full px-3 transition-colors hover:bg-sunk hover:text-ink ${section === id ? "text-ink" : ""}`}
               >
                 {label} <Chevron open={menu === id} />
+                <span
+                  aria-hidden
+                  className={`absolute inset-x-3 -bottom-0.5 h-0.5 origin-left rounded-full bg-brand transition-transform duration-500 ease-[var(--ease-out)] ${section === id ? "scale-x-100" : "scale-x-0"}`}
+                />
               </button>
             </li>
           ))}
@@ -120,7 +155,7 @@ export function Nav() {
       {/* Desktop dropdowns */}
       <div
         id="menu-platform"
-        className={`absolute inset-x-0 top-full hidden border-b border-line bg-paper/95 backdrop-blur-xl md:block ${reveal(menu === "platform")}`}
+        className={`absolute inset-x-0 top-full hidden bg-paper shadow-[0_24px_40px_-24px_rgba(17,17,19,.25)] md:block ${reveal(menu === "platform")}`}
       >
         <div className="container-x grid grid-cols-4 gap-2 py-6">
           {platformLinks.map((l) => (
@@ -133,7 +168,7 @@ export function Nav() {
       </div>
       <div
         id="menu-solutions"
-        className={`absolute inset-x-0 top-full hidden border-b border-line bg-paper/95 backdrop-blur-xl md:block ${reveal(menu === "solutions")}`}
+        className={`absolute inset-x-0 top-full hidden bg-paper shadow-[0_24px_40px_-24px_rgba(17,17,19,.25)] md:block ${reveal(menu === "solutions")}`}
       >
         <div className="container-x grid grid-cols-5 gap-2 py-6">
           {solutionLinks.map((l) => (

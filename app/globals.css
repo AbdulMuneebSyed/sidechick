@@ -26,7 +26,6 @@
   --color-night-line: #2a2a33;
 
   --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-dm-mono), ui-monospace, Menlo, monospace;
 
   --text-display: clamp(2.6rem, 6.2vw, 4.75rem);
   --text-display--line-height: 1.02;
@@ -34,6 +33,10 @@
   --text-h2: clamp(1.75rem, 4vw, 3.25rem);
   --text-h2--line-height: 1.06;
   --text-h2--letter-spacing: -0.03em;
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.76, 0, 0.24, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
 
   --animate-marquee: marquee 60s linear infinite;
   @keyframes fadeIn {
@@ -64,16 +67,14 @@
   .container-x { margin-inline: auto; width: 100%; max-width: 76rem; padding-inline: 1.25rem; }
   @media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
 
-  .eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--color-brand-ink); }
+  /* Section label: the text face at reading size, not tiny tracked capitals. */
+  .eyebrow { font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.005em; color: var(--color-brand-ink); }
 
   /* Ramp/Attio-style dotted field behind product imagery */
   .dot-field {
     background-image: radial-gradient(color-mix(in srgb, var(--color-ink) 14%, transparent) 1px, transparent 1px);
     background-size: 18px 18px;
   }
-  /* Light sweep across the lifecycle stages */
-  .lifecycle-sweep { animation: sweep 2.4s ease-in-out infinite; transform: translateX(-120%); }
-  @keyframes sweep { 0% { transform: translateX(-120%); } 60%, 100% { transform: translateX(320%); } }
 
   /* Riskube capability chips light up in sequence */
   .riskube-chip-box { fill: var(--color-night-2); stroke: var(--color-night-line); stroke-width: 1; }
@@ -82,7 +83,6 @@
   .riskube-chip-m { animation: chipm 3.85s ease-in-out infinite; }
   @keyframes chipm { 0%, 18%, 70%, 100% { border-color: rgb(255 255 255 / .1); } 28%, 48% { border-color: var(--color-brand); } }
 
-  .brand-gradient { background-image: linear-gradient(90deg, var(--color-brand), var(--color-brand-deep)); }
 
   /* Hero entrance, CSS-only so it runs before hydration */
   .rise { animation: rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both; }
@@ -90,6 +90,72 @@
   .line-rise { display: block; overflow: hidden; padding-bottom: 0.1em; margin-bottom: -0.1em; }
   .line-rise > span { display: block; animation: line-rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--d, 0ms) both; }
   @keyframes line-rise { from { transform: translateY(105%); } }
+
+  /* Hero signature: the product frame opens like a shutter (CSS, so it runs before hydration).
+     The inset reaches past the frame so its ring and shadow are not cut. */
+  .shutter-in { animation: shutter-in 1.1s var(--ease-in-out) var(--d, 0ms) both; }
+  .shutter-in > * { animation: shutter-settle 1.6s var(--ease-soft) var(--d, 0ms) both; }
+  @keyframes shutter-in { from { clip-path: inset(-60px -60px 100% -60px); } to { clip-path: inset(-60px); } }
+  @keyframes shutter-settle { from { transform: scale(1.06); } }
+
+  /*
+    Scroll reveals (see components/ui/Reveal.tsx). Server HTML is the finished
+    state; only blocks that start below the fold get data-state="hidden", once JS runs.
+  */
+  [data-reveal] { transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out), clip-path 1100ms var(--ease-in-out); transition-delay: var(--d, 0ms); }
+  [data-reveal="rise"][data-state="hidden"] { opacity: 0; transform: translate3d(var(--rx, 0px), var(--ry, 24px), 0); }
+  [data-reveal="settle"][data-state="hidden"] { opacity: 0; transform: scale(0.96); }
+  [data-reveal="shutter"] { clip-path: inset(0); }
+  [data-reveal="shutter"][data-state="hidden"] { clip-path: inset(0 0 100% 0); }
+  [data-reveal="shutter"] > * { transition: transform 1500ms var(--ease-soft) var(--d, 0ms); }
+  [data-reveal="shutter"][data-state="hidden"] > * { transform: scale(1.12); }
+  /* Parts of a block arrive in reading order, 80ms apart */
+  [data-reveal="stagger"] > * { transition: opacity 700ms var(--ease-out), transform 900ms var(--ease-out); transition-delay: calc(var(--d, 0ms) + var(--i, 0) * 80ms); }
+  [data-reveal="stagger"][data-state="hidden"] > * { opacity: 0; transform: translate3d(0, 20px, 0); }
+  [data-reveal="stagger"] > :nth-child(2) { --i: 1; }
+  [data-reveal="stagger"] > :nth-child(3) { --i: 2; }
+  [data-reveal="stagger"] > :nth-child(4) { --i: 3; }
+  [data-reveal="stagger"] > :nth-child(5) { --i: 4; }
+  [data-reveal="stagger"] > :nth-child(6) { --i: 5; }
+  [data-reveal="stagger"] > :nth-child(7) { --i: 6; }
+  [data-reveal="stagger"] > :nth-child(8) { --i: 7; }
+  /* A bar that draws in from the left, inside any reveal */
+  .draw-x { transform-origin: left; transition: transform 900ms var(--ease-out); transition-delay: var(--dx, 300ms); }
+  [data-state="hidden"] .draw-x { transform: scaleX(0); }
+
+  /* Before → after: the old way is struck through, then the new one slides in */
+  .strike { background: linear-gradient(currentColor, currentColor) 0 58% / 100% 1.5px no-repeat; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background-size 700ms var(--ease-out) var(--d, 0ms), color 400ms ease var(--d, 0ms); }
+  [data-state="hidden"] .strike { background-size: 0% 1.5px; }
+  .after-in { transition: opacity 600ms var(--ease-out), transform 700ms var(--ease-out); transition-delay: calc(var(--d, 0ms) + 380ms); }
+  [data-state="hidden"] .after-in { opacity: 0; transform: translate3d(-14px, 0, 0); }
+
+  /* Riskube diagram draws itself: data paths first, then the engine, then the capabilities */
+  .rk-draw { stroke-dasharray: 1; stroke-dashoffset: 0; transition: stroke-dashoffset 900ms var(--ease-in-out) var(--d, 0ms); }
+  [data-state="hidden"] .rk-draw { stroke-dashoffset: 1; }
+  .rk-fade { transform-box: fill-box; transform-origin: center; transition: opacity 700ms var(--ease-out) var(--d, 0ms), transform 900ms var(--ease-out) var(--d, 0ms); }
+  [data-state="hidden"] .rk-fade { opacity: 0; transform: translate3d(-10px, 0, 0); }
+  [data-state="hidden"] .rk-cube { opacity: 0; transform: translate3d(0, 14px, 0) scale(0.94); }
+  .rk-pulse { transition: opacity 400ms ease 2.2s; }
+  [data-state="hidden"] .rk-pulse { opacity: 0; transition: none; }
+
+  /* Segment copy rises word by word when the tab changes */
+  .word-rise > span { display: inline-block; animation: word-rise 600ms var(--ease-out) both; animation-delay: calc(var(--w) * 12ms); }
+  @keyframes word-rise { from { opacity: 0; transform: translateY(0.5em); } }
+
+  /* Closing loop: the active arc travels round Monitor → Optimize → Execute */
+  .loop-spin { transform-origin: center; transform-box: fill-box; animation: loop-spin 9s linear infinite; }
+  @keyframes loop-spin { to { transform: rotate(360deg); } }
+
+  /* Product screens drift a few percent as they cross the viewport */
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .drift { animation: drift linear both; animation-timeline: view(); animation-range: entry 0% exit 100%; }
+      @keyframes drift { from { transform: translateY(4%); } to { transform: translateY(-4%); } }
+      /* Footer wordmark rises into place as the page ends */
+      .wordmark-in { animation: wordmark-in linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }
+      @keyframes wordmark-in { from { opacity: 0.2; transform: translateY(35%); } }
+    }
+  }
 
   /* Hero film. Layers are placed in % of a 400×520 (narrow) or 1200×720 (wide)
      canvas, so the server-rendered frame is laid out before any JS runs. */

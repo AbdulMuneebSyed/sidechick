@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { m } from "motion/react";
 import { site } from "@/content/site";
 
 /**
@@ -33,21 +34,26 @@ export function LoopRing({ active, onSelect }: { active: number; onSelect: (i: n
   return (
     <div className="relative mx-auto aspect-square w-full max-w-[22rem]">
       <svg viewBox="0 0 360 360" className="absolute inset-0 size-full overflow-visible" aria-hidden>
-        <defs>
-          <linearGradient id="arc" x1="0" x2="1">
-            <stop offset="0" stopColor="#e84855" />
-            <stop offset="1" stopColor="#ac2631" />
-          </linearGradient>
-        </defs>
-        <circle cx="180" cy="180" r={R} fill="none" stroke="#e8e6e3" strokeWidth="2" />
-        <circle cx="180" cy="180" r={R + 26} fill="none" stroke="#e8e6e3" strokeWidth="1" strokeDasharray="2 8" />
+        {/* The ring draws itself once when it first comes into view */}
+        <m.circle
+          cx="180"
+          cy="180"
+          r={R}
+          fill="none"
+          stroke="#e8e6e3"
+          strokeWidth="2"
+          initial={{ pathLength: 0, rotate: -90 }}
+          whileInView={{ pathLength: 1 }}
+          viewport={{ once: true, amount: 0.6 }}
+          transition={{ duration: 1.4, ease: [0.76, 0, 0.24, 1] }}
+        />
         {/* Active segment: one third of the ring, rotated to start at the active node */}
         <circle
           cx="180"
           cy="180"
           r={R}
           fill="none"
-          stroke="url(#arc)"
+          stroke="#e84855"
           strokeWidth="4"
           strokeLinecap="round"
           strokeDasharray={`${C / 3 - 6} ${C}`}
@@ -64,7 +70,7 @@ export function LoopRing({ active, onSelect }: { active: number; onSelect: (i: n
       </svg>
 
       {/* Centre: the engine */}
-      <div className="absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-paper text-center shadow-[0_0_0_1px_var(--color-line),0_20px_40px_-24px_rgba(17,17,19,.3)]">
+      <div className="absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-paper text-center">
         <Image src="/media/logo-mark.png" alt="" width={44} height={44} className="size-10" />
         <p className="mt-2 px-3 text-[11px] font-medium leading-tight text-ink-2">{site.lifecycle.engine.text}</p>
       </div>
@@ -79,8 +85,8 @@ export function LoopRing({ active, onSelect }: { active: number; onSelect: (i: n
             type="button"
             onClick={() => onSelect(i)}
             aria-pressed={on}
-            className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-2 text-sm font-semibold transition duration-300 ${
-              on ? "brand-gradient text-white shadow-[0_10px_24px_-10px_rgba(172,38,49,.7)]" : "border border-line bg-paper text-ink-2 hover:border-ink/25"
+            className={`absolute -translate-x-1/2 -translate-y-1/2 rounded-full px-4 py-2 text-sm font-semibold transition-[background-color,color,transform] duration-300 active:scale-[.96] ${
+              on ? "bg-brand-ink text-white" : "bg-paper text-ink-2 hover:bg-sunk hover:text-ink"
             }`}
             style={{ left: `${(p.x / 360) * 100}%`, top: `${(p.y / 360) * 100}%` }}
           >

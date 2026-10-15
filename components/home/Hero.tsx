@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { site } from "@/content/site";
 import { Arrow, Button } from "@/components/ui/Button";
 import { LineRise, Rise } from "@/components/ui/Rise";
@@ -16,30 +17,12 @@ export function Hero() {
   const tail = restWords.at(-1);
   return (
     <section className="relative overflow-hidden pb-20 pt-14 md:pb-28 md:pt-20">
-      {/* Background: dotted field fading out, soft brand glow behind the product */}
-      <div aria-hidden className="dot-field absolute inset-0 [mask-image:radial-gradient(ellipse_70%_60%_at_50%_30%,black,transparent)]" />
-      <div
-        aria-hidden
-        className="absolute left-1/2 top-[38rem] h-[36rem] w-[70rem] -translate-x-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(232,72,85,.16),transparent)] blur-2xl"
-      />
-
       <div className="container-x relative">
         <div className="mx-auto flex max-w-5xl flex-col items-center text-center">
-          <Rise>
-            <ul className="mb-7 inline-flex items-center gap-1 rounded-full border border-line bg-paper/80 p-1 pr-1.5 text-[13px] text-ink-2 shadow-sm backdrop-blur">
-              {hero.badges.map((b, i) => (
-                <li key={b.text} className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 odd:bg-transparent">
-                  <Image src={BADGE_ICONS[i]} alt="" width={16} height={16} className="size-4 opacity-80" />
-                  {b.text}
-                </li>
-              ))}
-            </ul>
-          </Rise>
-
           <h1 className="text-display font-semibold text-ink">
             <LineRise delay={80}>{lineOne}</LineRise>
             <LineRise delay={180}>
-              <span className="whitespace-nowrap bg-gradient-to-r from-brand to-brand-deep bg-clip-text text-transparent">{highlight}</span> {tail}
+              <span className="whitespace-nowrap text-brand">{highlight}</span> {tail}
             </LineRise>
           </h1>
 
@@ -55,11 +38,22 @@ export function Hero() {
               {hero.primaryCta.text} <Arrow />
             </Button>
           </Rise>
+
+          <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-base text-ink-2">
+            {hero.badges.map((b, i) => (
+              <li key={b.text} className="rise inline-flex items-center gap-2" style={{ "--d": `${520 + i * 80}ms` } as CSSProperties}>
+                <Image src={BADGE_ICONS[i]} alt="" width={16} height={16} className="size-4" />
+                {b.text}
+              </li>
+            ))}
+          </ul>
         </div>
 
-        <Rise delay={560} className="mt-16 md:mt-20">
-          <HeroStage />
-        </Rise>
+        <div className="shutter-in mt-14 md:mt-16" style={{ "--d": "640ms" } as CSSProperties}>
+          <div>
+            <HeroStage />
+          </div>
+        </div>
       </div>
     </section>
   );
