@@ -14,8 +14,8 @@
   --color-line: #e8e6e3;
   --color-line-2: #f0eeeb;
   --color-paper: #ffffff;
-  --color-wash: #faf9f7;
-  --color-sunk: #f4f2ef;
+  --color-wash: #f6f6f4;
+  --color-sunk: #efeeec;
   --color-brand: #e84855;
   --color-brand-deep: #ac2631;
   --color-brand-ink: #b8303c;
@@ -68,7 +68,7 @@
   @media (min-width: 768px) { .container-x { padding-inline: 2rem; } }
 
   /* Section label: the text face at reading size, not tiny tracked capitals. */
-  .eyebrow { font-size: 0.9375rem; font-weight: 500; letter-spacing: -0.005em; color: var(--color-brand-ink); }
+  .eyebrow { font-size: 1rem; font-weight: 500; letter-spacing: -0.005em; color: var(--color-brand-ink); }
 
   /* Ramp/Attio-style dotted field behind product imagery */
   .dot-field {
@@ -124,8 +124,8 @@
   [data-state="hidden"] .draw-x { transform: scaleX(0); }
 
   /* Before → after: the old way is struck through, then the new one slides in */
-  .strike { background: linear-gradient(currentColor, currentColor) 0 58% / 100% 1.5px no-repeat; -webkit-box-decoration-break: clone; box-decoration-break: clone; transition: background-size 700ms var(--ease-out) var(--d, 0ms), color 400ms ease var(--d, 0ms); }
-  [data-state="hidden"] .strike { background-size: 0% 1.5px; }
+  .strike { text-decoration: line-through 1.5px currentColor; transition: text-decoration-color 700ms var(--ease-out) var(--d, 0ms); }
+  [data-state="hidden"] .strike { text-decoration-color: transparent; }
   .after-in { transition: opacity 600ms var(--ease-out), transform 700ms var(--ease-out); transition-delay: calc(var(--d, 0ms) + 380ms); }
   [data-state="hidden"] .after-in { opacity: 0; transform: translate3d(-14px, 0, 0); }
 

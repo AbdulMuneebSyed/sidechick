@@ -27,7 +27,7 @@ export function Hero() {
           </h1>
 
           <Rise delay={320}>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted md:text-xl">{hero.subtitle.text}</p>
+            <p className="mt-6 max-w-2xl text-xl leading-relaxed text-ink-2">{hero.subtitle.text}</p>
           </Rise>
 
           <Rise delay={420} className="mt-9 flex flex-wrap items-center justify-center gap-3">

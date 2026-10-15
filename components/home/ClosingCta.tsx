@@ -27,7 +27,7 @@ export function ClosingCta() {
         <Reveal variant="stagger" className="relative mx-auto max-w-2xl">
           <Image src="/media/logo-mark.png" alt="" width={44} height={44} className="mx-auto size-11 rounded-xl bg-white p-1.5" />
           <h2 className="mt-8 text-h2 font-semibold">{closing.title.text}</h2>
-          <p className="mt-5 text-lg text-white/75">{closing.body.text}</p>
+          <p className="mt-5 text-xl text-white/75">{closing.body.text}</p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
             <Button href="/demo">
               {closing.cta.text} <Arrow />

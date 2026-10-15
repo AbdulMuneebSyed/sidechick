@@ -18,7 +18,7 @@ type Props = { variant?: Variant; size?: "sm" | "md"; children: ReactNode; class
 export function Button({ variant = "primary", size = "md", className = "", children, ...rest }: Props) {
   const cls = [
     "group/btn inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full font-medium transition-[transform,background-color,color] duration-200 ease-[var(--ease-out)] active:scale-[.97] active:duration-100",
-    size === "sm" ? "h-9 px-4 text-sm" : "h-11 px-5 text-[15px]",
+    size === "sm" ? "h-9 px-4 text-sm" : "h-11 px-5 text-base",
     styles[variant],
     className,
   ].join(" ");

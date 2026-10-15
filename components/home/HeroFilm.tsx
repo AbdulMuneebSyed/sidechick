@@ -30,9 +30,9 @@ const [, COLLECTIONS, RECOVERY] = site.why.pillars;
 const TRANSITION_MS = 800;
 const HOLD_MS = 1000;
 const SHOTS = [
-  { chapter: 0, tint: "#faf9f7" },
+  { chapter: 0, tint: "#f6f6f4" },
   { chapter: 1, tint: "#f2f0fe" },
-  { chapter: 2, tint: "#fff7f1" },
+  { chapter: 2, tint: "#f5f4f3" },
   { chapter: 3, tint: "#e8f2ed" },
   { chapter: 3, tint: "#fdf0f1" },
 ].map((s) => ({ ...s, ms: TRANSITION_MS + HOLD_MS }));
@@ -236,7 +236,7 @@ function StepShot({ index, phase, ms }: { index: number; phase: Phase; ms: numbe
       </m.div>
 
       <div className={captionBox}>
-        <m.p custom={0} variants={line} initial={false} animate={phase} className="inline-flex rounded-full bg-paper px-2.5 py-1 text-[11px] font-medium text-ink-2 ring-1 ring-ink/10 @min-[40rem]:text-[clamp(10px,1.05cqw,13px)]">
+        <m.p custom={0} variants={line} initial={false} animate={phase} className="inline-flex rounded-full bg-paper px-2.5 py-1 text-sm font-medium text-ink-2 ring-1 ring-ink/10">
           {step.label.text}
         </m.p>
         <m.p custom={1} variants={line} initial={false} animate={phase} className="mt-2 text-[9cqw] font-semibold leading-none tracking-[-0.035em] text-ink @min-[40rem]:mt-4 @min-[40rem]:text-[5.2cqw]">

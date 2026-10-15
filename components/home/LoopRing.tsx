@@ -72,7 +72,7 @@ export function LoopRing({ active, onSelect }: { active: number; onSelect: (i: n
       {/* Centre: the engine */}
       <div className="absolute inset-[26%] flex flex-col items-center justify-center rounded-full bg-paper text-center">
         <Image src="/media/logo-mark.png" alt="" width={44} height={44} className="size-10" />
-        <p className="mt-2 px-3 text-[11px] font-medium leading-tight text-ink-2">{site.lifecycle.engine.text}</p>
+        <p className="mt-2 px-3 text-sm font-medium leading-tight text-ink-2">{site.lifecycle.engine.text}</p>
       </div>
 
       {/* Nodes */}

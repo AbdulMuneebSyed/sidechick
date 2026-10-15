@@ -21,12 +21,12 @@ export function Pillars() {
   const rest = `by ${restParts.join(" by ")}`;
 
   return (
-    <section id="why" className="scroll-mt-20 py-24 md:py-36">
+    <section id="why" aria-labelledby="why-statement" className="scroll-mt-20 py-24 md:py-36">
       <div className="container-x">
         <Reveal className="max-w-[68rem]">
-          <h2 className="text-[clamp(1.5rem,2.6vw,2.25rem)] font-semibold leading-[1.15] tracking-[-0.025em]">
+          <p id="why-statement" className="text-xl font-semibold leading-[1.25] tracking-[-0.02em] sm:text-2xl lg:text-4xl lg:leading-[1.15]">
             {lead} <span className="text-faint">{rest}</span>
-          </h2>
+          </p>
         </Reveal>
 
         <div className="mt-14 grid gap-5 md:mt-20 md:grid-cols-[1.05fr_1fr] md:grid-rows-2">
@@ -54,7 +54,7 @@ export function Pillars() {
                     </div>
                   </div>
                   <Reveal variant="stagger" delay={160 + i * 110} className={`flex flex-col gap-3 p-6 md:p-8 ${tall ? "" : "lg:flex-1"}`}>
-                    <h3 className={`font-semibold tracking-tight ${tall ? "text-2xl md:text-[1.75rem]" : "text-xl"}`}>{p.title.text}</h3>
+                    <h3 className={`font-semibold tracking-tight ${tall ? "text-2xl" : "text-xl"}`}>{p.title.text}</h3>
                     <p className="text-base leading-relaxed text-ink-2">{p.description.text}</p>
                     <p className="mt-auto flex flex-wrap items-baseline gap-x-2 pt-4">
                       <span className={`font-semibold tracking-tight text-brand-ink ${tall ? "text-4xl" : "text-2xl"}`}>{p.figure.text}</span>

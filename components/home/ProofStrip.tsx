@@ -15,7 +15,7 @@ export function ProofStrip() {
                 <span className="font-medium text-ink">{p.title.text}</span>
                 <span className="block">{p.result.text}</span>
               </dt>
-              <dd className="order-1 text-[clamp(2.75rem,5vw,4rem)] font-semibold leading-none tracking-[-0.04em] text-ink">
+              <dd className="order-1 text-h2 font-semibold leading-none tracking-[-0.04em] text-ink">
                 <CountUp text={p.figure.text} />
               </dd>
               {/* Brand bar draws in alongside the count */}

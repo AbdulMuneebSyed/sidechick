@@ -12,7 +12,7 @@ export function BeforeAfter() {
       <div className="container-x">
         <Reveal variant="stagger" className="mx-auto max-w-3xl text-center">
           <h2 className="text-h2 font-semibold">{ba.title.text}</h2>
-          <p className="mt-4 text-lg text-ink-2">{ba.subtitle.text}</p>
+          <p className="mt-4 text-xl text-ink-2">{ba.subtitle.text}</p>
         </Reveal>
 
         {/* Mobile: two stacked lists */}

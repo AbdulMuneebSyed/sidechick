@@ -80,7 +80,7 @@ export function Segments() {
                   aria-controls="segment-panel"
                   tabIndex={on ? 0 : -1}
                   onClick={() => setPicked({ id: s.id, hash })}
-                  className={`relative shrink-0 rounded-xl px-4 py-3 text-left text-base font-medium transition-[color,transform] duration-200 active:scale-[.98] lg:px-5 lg:py-4 lg:text-lg ${
+                  className={`relative shrink-0 rounded-xl px-4 py-3 text-left text-base font-medium transition-[color,transform] duration-200 active:scale-[.98] lg:px-5 lg:py-4 lg:text-xl ${
                     on ? "text-ink" : "text-muted hover:text-ink"
                   }`}
                 >
@@ -98,7 +98,7 @@ export function Segments() {
           className="relative isolate flex min-h-[26rem] min-w-0 flex-col justify-end overflow-hidden rounded-3xl bg-wash p-8 md:p-12"
         >
           <SegmentVideo name={VIDEOS[active]} />
-          <div aria-hidden className="absolute inset-0 -z-10 bg-gradient-to-t from-wash via-wash/85 to-wash/20" />
+          <div aria-hidden className="absolute inset-0 -z-10 bg-wash/75" />
           <AnimatePresence mode="wait" initial={false}>
             <m.div
               key={item.id}
